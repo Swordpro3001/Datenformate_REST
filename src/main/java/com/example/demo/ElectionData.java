@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ElectionData {
-    private String regionID;
+    private int regionID;
     private String regionName;
     private String regionAddress;
     private String regionPostalCode;
@@ -36,3 +36,5 @@ class PreferenceVote {
     private String candidateName;
     private int votes;
 }
+
+

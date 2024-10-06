@@ -1,20 +1,29 @@
 package com.example.demo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
-@RequestMapping("/api/election")
+@RequestMapping("/wahlen")
 public class ElectionDataController {
 
-    @Autowired
-    private ElectionDataService electionDataService;
+    private final ElectionDataService electionDataService;
 
-    @GetMapping(value = "/data", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ElectionData getElectionData() {
-        return electionDataService.generateElectionData();
+    public ElectionDataController(ElectionDataService electionDataService) {
+        this.electionDataService = electionDataService;
+    }
+
+    @GetMapping(value = "/data/{eID}/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ElectionData getElectionDataAsJson(@PathVariable int eID) {
+        return electionDataService.getElectionData(eID);
+    }
+
+    @GetMapping(value = "/data/{eID}/xml", produces = MediaType.APPLICATION_XML_VALUE)
+    public ElectionData getElectionDataAsXml(@PathVariable int eID) {
+        return electionDataService.getElectionData(eID);
     }
 }

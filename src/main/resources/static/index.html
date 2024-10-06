@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Results</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        #searchInput, #regionalIDInput {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Election Results</h1>
+
+<!-- Eingabefeld für regionalID -->
+<input type="text" id="regionalIDInput" placeholder="Enter regional ID (eID)" />
+
+<!-- Button zum Abrufen der Daten -->
+<button id="loadDataBtn">Load Election Data</button>
+
+<!-- Suchfeld für die Tabelle -->
+<input type="text" id="searchInput" placeholder="Search by Party or Preference Vote..." style="display: none;">
+
+<table id="electionTable" style="display: none;">
+    <thead>
+    <tr>
+        <th>Party</th>
+        <th>Votes</th>
+        <th>Preference Votes</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Dynamische Inhalte werden hier eingefügt -->
+    </tbody>
+</table>
+
+<script>
+    // Funktion zum Abrufen der XML-Daten von der API
+    function loadElectionData(electionID) {
+        $.ajax({
+            url: "http://localhost:8080/wahlen/data/" + electionID + "/xml",
+            method: "GET",
+            dataType: "xml",
+            success: function(data) {
+                const tableBody = $("#electionTable tbody");
+                tableBody.empty();  // Tabelle leeren
+
+                // XML-Daten verarbeiten und in die Tabelle einfügen
+                $(data).find("countingData > countingData").each(function () {
+                    const partyID = $(this).find("partyID").text();
+                    const amountVotes = $(this).find("amountVotes").text();
+                    let preferenceVotes = [];
+
+                    // Vorzugsstimmen durchlaufen und in Array speichern
+                    $(this).find("preferenceVotes > preferenceVotes").each(function () {
+                        const candidateName = $(this).find("candidateName").text();
+                        const votes = $(this).find("votes").text();
+                        preferenceVotes.push(candidateName + " (" + votes + ")");
+                    });
+
+                    // Zeile für jede Partei einfügen
+                    const row = `<tr>
+                            <td>${partyID}</td>
+                            <td>${amountVotes}</td>
+                            <td>${preferenceVotes.join(", ")}</td>
+                        </tr>`;
+                    tableBody.append(row);
+                });
+
+                // Tabelle und Suchfeld sichtbar machen
+                $("#electionTable").show();
+                $("#searchInput").show();
+            },
+            error: function() {
+                alert("Failed to load data for regional ID " + electionID + ". Please check the ID and try again.");
+                $("#electionTable").hide();
+                $("#searchInput").hide();
+            }
+        });
+    }
+
+    // Event-Listener zum Laden der Daten basierend auf der regionalID
+    $("#loadDataBtn").on("click", function() {
+        const electionID = $("#regionalIDInput").val().trim();  // Holen der eingegebenen regionalID
+        if (electionID) {
+            loadElectionData(electionID);  // Daten laden
+        } else {
+            alert("Please enter a valid regional ID.");
+        }
+    });
+
+    // Suchfunktion zum Filtern der Tabelle
+    $("#searchInput").on("keyup", function () {
+        const value = $(this).val().toLowerCase();
+        $("#electionTable tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+</script>
+</body>
+</html>
