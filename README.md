@@ -23,7 +23,7 @@
 
 ### 1. **API-Endpunkt zur Bereitstellung von Wahldaten**
 
-Die REST-API in der Spring Boot Anwendung dient dazu, die Wahldaten basierend auf der übergebenen **regionalID** als XML zu liefern. Hierfür haben wir einen Controller implementiert, der die Anfragen an diesen Endpunkt verarbeitet.
+Die REST-API in der Spring Boot Anwendung dient dazu, die Wahldaten basierend auf der übergebenen **regionalID** als XML zu liefern. Hierfür habe ich einen Controller implementiert, der die Anfragen an diesen Endpunkt verarbeitet.
 
 ### **Beispiel-Controller (ElectionDataController.java)**
 
