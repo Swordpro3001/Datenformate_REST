@@ -5,24 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Election Results</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        #searchInput, #regionalIDInput {
-            margin-bottom: 10px;
-            padding: 5px;
-            width: 100%;
-        }
-    </style>
+    <!-- Verlinkung zur separaten CSS-Datei -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 <h1>Election Results</h1>
@@ -34,8 +18,9 @@
 <button id="loadDataBtn">Load Election Data</button>
 
 <!-- Suchfeld für die Tabelle -->
-<input type="text" id="searchInput" placeholder="Search by Party or Preference Vote..." style="display: none;">
+<input type="text" id="searchInput" placeholder="Search by Party or Preference Vote...">
 
+<!-- Tabelle -->
 <table id="electionTable" style="display: none;">
     <thead>
     <tr>
